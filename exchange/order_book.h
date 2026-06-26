@@ -2,10 +2,10 @@
 
 #include <algorithm>
 #include <map>
+#include <sstream>
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <format>
 
 #include "exchange/order.h"
 #include "common/mem_pool.h"
@@ -79,34 +79,33 @@ public:
 
     // TOSTRING — print the full order book
     std::string toString() const {
-        std::string result = "=== ORDER BOOK ===\n";
+        std::ostringstream oss;
+        oss << "=== ORDER BOOK ===\n";
 
         // Print asks from highest to lowest
-        result += "  ASKS:\n";
+        oss << "  ASKS:\n";
         for (auto it = asks_.rbegin(); it != asks_.rend(); ++it) {
             for (const Order* o : it->second) {
-                result += std::format("    {:.2f}  size={}\n",
-                    it->first, o->getSize());
+                oss << "    " << it->first << "  size=" << o->getSize() << "\n";
             }
         }
 
         // Print mid price
         if (!bids_.empty() && !asks_.empty()) {
             double mid = (bestBid() + bestAsk()) / 2.0;
-            result += std::format("  --- mid {:.2f} ---\n", mid);
+            oss << "  --- mid " << mid << " ---\n";
         }
 
         // Print bids from highest to lowest
-        result += "  BIDS:\n";
+        oss << "  BIDS:\n";
         for (auto it = bids_.rbegin(); it != bids_.rend(); ++it) {
             for (const Order* o : it->second) {
-                result += std::format("    {:.2f}  size={}\n",
-                    it->first, o->getSize());
+                oss << "    " << it->first << "  size=" << o->getSize() << "\n";
             }
         }
 
-        result += "==================\n";
-        return result;
+        oss << "==================\n";
+        return oss.str();
     }
 
 private:

@@ -1,7 +1,7 @@
 #pragma once
 
+#include <sstream>
 #include <string>
-#include <format>
 
 // Side: is this a buy or sell order?
 enum class Side { BUY, SELL };
@@ -11,6 +11,9 @@ enum class OrderType { LIMIT, MARKET };
 
 class Order {
 public:
+    // Default constructor — needed by std::vector resize in MemPool
+    Order() = default;
+
     // Constructor — creates an order with all required fields
     Order(std::string ticker,
           int         size,
@@ -42,16 +45,15 @@ public:
 
     // toString — like Python's __str__, prints order info
     std::string toString() const {
-        return std::format(
-            "Order[id={}, ticker={}, side={}, type={}, price={:.2f}, size={}, client={}]",
-            order_id_,
-            ticker_,
-            side_ == Side::BUY ? "BUY" : "SELL",
-            type_ == OrderType::LIMIT ? "LIMIT" : "MARKET",
-            price_,
-            size_,
-            client_id_
-        );
+        std::ostringstream oss;
+        oss << "Order[id=" << order_id_
+            << ", ticker=" << ticker_
+            << ", side=" << (side_ == Side::BUY ? "BUY" : "SELL")
+            << ", type=" << (type_ == OrderType::LIMIT ? "LIMIT" : "MARKET")
+            << ", price=" << price_
+            << ", size=" << size_
+            << ", client=" << client_id_ << "]";
+        return oss.str();
     }
 
 private:

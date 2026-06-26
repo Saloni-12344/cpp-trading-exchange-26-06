@@ -1,4 +1,4 @@
-load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 cc_library(
     name = "order",
@@ -14,4 +14,10 @@ cc_library(
         ":order",
         "//common:mem_pool",
     ],
+)
+
+cc_binary(
+    name = "order_book_test",
+    srcs = ["order_book_test.cpp"],
+    deps = [":order_book"],
 )
