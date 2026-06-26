@@ -1,6 +1,12 @@
 load("@rules_cc//cc:defs.bzl", "cc_library")
 
 cc_library(
+    name = "mem_pool",
+    hdrs = ["mem_pool.h"],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
     name = "perf_utils",
     hdrs = ["perf_utils.h"],
     visibility = ["//visibility:public"],
